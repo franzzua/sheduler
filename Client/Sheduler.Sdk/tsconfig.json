@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"target": "es2021",
+		"useDefineForClassFields": false,
+		"lib": ["ES2020"],
+		"module": "ESNext",
+		"skipLibCheck": true,
+		"composite": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"isolatedModules": true,
+		"stripInternal": true,
+		"noEmit": false,
+		"outDir": "./dist",
+		/* Linting */
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"incremental": true,
+		"noFallthroughCasesInSwitch": true,
+		"types": ["node"]
+	}
+}

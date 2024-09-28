@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.128-alpha">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup>
+    <BuildCommand/>
+    <StartupCommand/>
+    <TestCommand/>
+    <CleanCommand/>
+    <PublishCommand/>
+    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+  </PropertyGroup>
+</Project>
