@@ -1,5 +1,6 @@
 using Sheduler.App;
 using Sheduler.Domain;
+using Sheduler.Management;
 using Sheduler.Storage;
 using Sheduler.Timers.GoogleQueue;
 
@@ -21,6 +22,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.Services.SaveSwaggerJson();
 }
 // var group = app.MapGroup("/schedules");
 //

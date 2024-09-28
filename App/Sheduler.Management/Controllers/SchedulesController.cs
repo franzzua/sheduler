@@ -11,7 +11,8 @@ public class SchedulesController(AppService app) : ControllerBase
     public async Task<IEnumerable<ScheduleViewModel>> GetAll() => 
         await app.GetAll();
 
-    [HttpGet("/:id")]
+    [HttpGet]
+    [Route("{id}")]
     public async Task<ScheduleViewModel> Get(string id) => 
         await app.Get(id);
     

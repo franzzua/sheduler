@@ -77,7 +77,7 @@
         }
       }
     },
-    "/:id": {
+    "/Schedules/{id}": {
       "get": {
         "tags": [
           "Schedules"
@@ -85,7 +85,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
