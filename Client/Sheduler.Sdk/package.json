@@ -1,8 +1,8 @@
 {
-	"name": "@sheduler/sdk",
-	"scripts": {
-		"openapi": "npx openapi-typescript ../Sheduler.Management/swaggerfile.json -o ./src/api/openapi.d.ts"
-	},
+	"name": "@sheduler/monorepo",
+	"workspaces": [
+		"sdk"
+	],
 	"devDependencies": {
 		"@types/node": "20.16.10",
 		"typescript": "5.6.2"

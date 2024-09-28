@@ -22,7 +22,12 @@
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"incremental": true,
-		"noFallthroughCasesInSwitch": true,
-		"types": ["node"]
-	}
+		"noFallthroughCasesInSwitch": true
+	},
+	"include": [],
+	"references": [
+		{
+			"path": "sdk"
+		}
+	]
 }

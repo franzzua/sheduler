@@ -6,9 +6,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <Script Include="src\api\api.ts" />
-    <Script Include="src\index.ts" />
-    <Script Include="src\types\index.ts" />
+    <Script Include="sdk\src\api\api.ts" />
+    <Script Include="sdk\src\index.ts" />
+    <Script Include="sdk\src\types\index.ts" />
+    <Script Include="sdk\tsconfig.json" />
     <Script Include="tsconfig.json" />
   </ItemGroup>
   <PropertyGroup>
@@ -20,5 +21,7 @@
     <ShouldRunBuildScript>false</ShouldRunBuildScript>
     <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <Configurations>Debug</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 </Project>

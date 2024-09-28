@@ -1,0 +1,6 @@
+{
+	"name": "@sheduler/sdk",
+	"scripts": {
+		"openapi": "npx openapi-typescript ../Sheduler.Management/swaggerfile.json -o ./src/api/openapi.d.ts"
+	}
+}

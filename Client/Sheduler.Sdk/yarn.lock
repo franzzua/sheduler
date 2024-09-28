@@ -5,12 +5,18 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@sheduler/sdk@workspace:.":
+"@sheduler/monorepo@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@sheduler/sdk@workspace:."
+  resolution: "@sheduler/monorepo@workspace:."
   dependencies:
     "@types/node": "npm:20.16.10"
     typescript: "npm:5.6.2"
+  languageName: unknown
+  linkType: soft
+
+"@sheduler/sdk@workspace:sdk":
+  version: 0.0.0-use.local
+  resolution: "@sheduler/sdk@workspace:sdk"
   languageName: unknown
   linkType: soft
 
