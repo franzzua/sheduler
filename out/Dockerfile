@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-noble
 COPY ./worker/* /app/
 WORKDIR /app
-CMD sh
+CMD ./Sheduler.Worker
