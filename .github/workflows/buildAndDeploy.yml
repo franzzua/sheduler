@@ -14,6 +14,13 @@ on:
       DLL:
         required: true
         type: string
+        
+env:
+  PROJECT_ID: awtor-sheduler
+  GAR_LOCATION: europe-west1
+  REPOSITORY: docker
+  REGION: europe-west1
+
 jobs:
   build:
     runs-on: ubuntu-latest
