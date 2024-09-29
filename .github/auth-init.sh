@@ -78,15 +78,15 @@ gcloud projects add-iam-policy-binding $projectId \
 #gcloud services enable aiplatform.googleapis.com
 #gcloud services enable analytics.googleapis.com
 #gcloud services enable bigquery.googleapis.com
-gcloud services enable storage.googleapis.com
-gcloud services enable logging.googleapis.com
-gcloud services enable sql-component.googleapis.com
-gcloud services enable monitoring.googleapis.com
-gcloud services enable compute.googleapis.com
-gcloud services enable iamcredentials.googleapis.com
-gcloud services enable secretmanager.googleapis.com
-gcloud services enable artifactregistry.googleapis.com
-gcloud services enable run.googleapis.com
+gcloud services enable storage.googleapis.com --project=$projectId
+gcloud services enable logging.googleapis.com --project=$projectId
+gcloud services enable sql-component.googleapis.com --project=$projectId
+gcloud services enable monitoring.googleapis.com --project=$projectId
+gcloud services enable compute.googleapis.com --project=$projectId
+gcloud services enable iamcredentials.googleapis.com --project=$projectId
+gcloud services enable secretmanager.googleapis.com --project=$projectId
+gcloud services enable artifactregistry.googleapis.com --project=$projectId
+gcloud services enable run.googleapis.com --project=$projectId
 #gcloud services enable translate.googleapis.com
 
 gcloud artifacts repositories create docker --repository-format=docker --location=$location
