@@ -6,9 +6,6 @@ on:
       - main
       - develop
 
-env:
-  POSTFIX: ${{ github.ref == 'refs/heads/main' && '' || '-dev' }}
-
 jobs:
   api:
     uses: ./.github/workflows/buildAndDeploy.yml
@@ -18,8 +15,8 @@ jobs:
       id-token: 'write'
     with:
       DOTNET_VERSION: 8.0
-      SERVICE: "sheduler-api${{ env.POSTFIX }}"
-      SECRET: "appsettings${{ env.POSTFIX }}"
+      SERVICE: "sheduler-api${{ github.ref == 'refs/heads/main' && '' || '-dev' }}"
+      SECRET: "appsettings${{ github.ref == 'refs/heads/main' && '' || '-dev' }}"
       DLL: 'Sheduler.Management'
       PATH: ./App/Sheduler.Management/
   
@@ -31,7 +28,7 @@ jobs:
       id-token: 'write'
     with:
       DOTNET_VERSION: 8.0
-      SERVICE: "sheduler-worker${{ env.POSTFIX }}"
-      SECRET: "appsettings${{ env.POSTFIX }}"
+      SERVICE: "sheduler-worker${{ github.ref == 'refs/heads/main' && '' || '-dev' }}"
+      SECRET: "appsettings${{ github.ref == 'refs/heads/main' && '' || '-dev' }}"
       DLL: 'Sheduler.Worker'
       PATH: ./App/Sheduler.Worker/
