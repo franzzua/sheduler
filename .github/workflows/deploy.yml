@@ -1,0 +1,72 @@
+name: deploy.yml
+on:
+  workflow_call: 
+    inputs: 
+      SERVICE:
+        required: true
+        type: string
+      artifact:
+        required: true
+        type: string
+      PROJECT_ID:
+        required: true
+        type: string
+      GAR_LOCATION:
+        required: true
+        type: string
+      REPOSITORY:
+        required: true
+        type: string
+      REGION:
+        required: true
+        type: string
+      DLL:
+        required: true
+        type: string
+        
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Download backend artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact }}
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+          service_account: 'github-deploy@${{ inputs.PROJECT_ID }}.iam.gserviceaccount.com' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
+
+      - name: Docker Auth
+        id: docker-auth
+        uses: 'docker/login-action@v3'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ inputs.GAR_LOCATION }}-docker.pkg.dev'
+
+      - name: Build and Push Container
+        run: |-
+          echo 'FROM mcr.microsoft.com/dotnet/aspnet:8.0' > Dockerfile
+          echo 'COPY ./ /app' >> Dockerfile
+          echo 'WORKDIR /app' >> Dockerfile
+          echo 'ENTRYPOINT ["dotnet", "./Sheduler.Management.dll", "--urls=http://0.0.0.0:8080"]' >> Dockerfile
+          docker build -t "${{ inputs.GAR_LOCATION }}-docker.pkg.dev/${{ inputs.PROJECT_ID }}/${{ inputs.REPOSITORY }}/${{ inputs.SERVICE }}:${{ github.sha }}" ./
+          docker push "${{ inputs.GAR_LOCATION }}-docker.pkg.dev/${{ inputs.PROJECT_ID }}/${{ inputs.REPOSITORY }}/${{ inputs.SERVICE }}:${{ github.sha }}"
+
+      - name: Deploy Api
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ inputs.SERVICE }}
+          region: ${{ inputs.REGION }}
+          project_id: ${{ inputs.PROJECT_ID }}
+          image: ${{ inputs.GAR_LOCATION }}-docker.pkg.dev/${{ inputs.PROJECT_ID }}/${{ inputs.REPOSITORY }}/${{ inputs.SERVICE }}:${{ github.sha }}
+    

@@ -11,90 +11,35 @@ env:
   GAR_LOCATION: europe-west1
   REPOSITORY: docker
   REGION: europe-west1
-  NODE_VERSION: '20.x'  
 
 jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
       DOTNET_VERSION: 8.0
-      
+  
   deploy-worker:
     needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    steps:
-      - name: Download backend artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: worker
-
-      - name: Google Auth
-        id: auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
-          service_account: 'github-deploy@${{ env.PROJECT_ID }}.iam.gserviceaccount.com' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
-
-     
-      - name: Deploy Sheduler.Worker
-        uses: 'google-github-actions/deploy-cloud-functions@v3'
-        with:
-          name: 'worker'
-          region: ${{ env.REGION }}
-          project_id: ${{ env.PROJECT_ID }}
-          runtime: dotnet8
-          source_dir: ./
-          entry_point: Worker
-          cpu: 0.5
-          memory: 512M
-          service_account: app-runner@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
-  
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      SERVICE: "sheduler-worker"
+      PROJECT_ID: awtor-sheduler
+      GAR_LOCATION: europe-west1
+      REPOSITORY: docker
+      REGION: europe-west1
+      DLL: 'Sheduler.Worker.dll'
+      artifact: worker
+      
   deploy-api:
     needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    env: 
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with: 
       SERVICE: "sheduler-api"
-    steps:
-      - name: Download backend artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: api
-
-      - name: Google Auth
-        id: auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          token_format: 'access_token'
-          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
-          service_account: 'github-deploy@${{ env.PROJECT_ID }}.iam.gserviceaccount.com' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
-      
-      - name: Docker Auth
-        id: docker-auth
-        uses: 'docker/login-action@v3'
-        with:
-          username: 'oauth2accesstoken'
-          password: '${{ steps.auth.outputs.access_token }}'
-          registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
-
-      - name: Build and Push Container
-        run: |-
-          echo 'FROM mcr.microsoft.com/dotnet/aspnet:8.0' > Dockerfile
-          echo 'COPY ./ /app' >> Dockerfile
-          echo 'WORKDIR /app' >> Dockerfile
-          echo 'ENTRYPOINT ["dotnet", "./Sheduler.Management.dll", "--urls=http://0.0.0.0:8080"]' >> Dockerfile
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
-
-      - name: Deploy Api
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ${{ env.SERVICE }}
-          region: ${{ env.REGION }}
-          project_id: ${{ env.PROJECT_ID }}
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
+      PROJECT_ID: awtor-sheduler
+      GAR_LOCATION: europe-west1
+      REPOSITORY: docker
+      REGION: europe-west1
+      DLL: 'Sheduler.Management.dll'
+      artifact: api
