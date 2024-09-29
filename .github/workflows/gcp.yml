@@ -6,12 +6,6 @@ on:
       - main
       - develop
 
-env:
-  PROJECT_ID: awtor-sheduler
-  GAR_LOCATION: europe-west1
-  REPOSITORY: docker
-  REGION: europe-west1
-
 jobs:
   build:
     uses: ./.github/workflows/build.yml
@@ -27,10 +21,6 @@ jobs:
       id-token: 'write'
     with:
       SERVICE: "sheduler-worker"
-      PROJECT_ID: awtor-sheduler
-      GAR_LOCATION: europe-west1
-      REPOSITORY: docker
-      REGION: europe-west1
       DLL: 'Sheduler.Worker.dll'
       artifact: worker
       
@@ -43,9 +33,5 @@ jobs:
       id-token: 'write'
     with: 
       SERVICE: "sheduler-api"
-      PROJECT_ID: awtor-sheduler
-      GAR_LOCATION: europe-west1
-      REPOSITORY: docker
-      REGION: europe-west1
       DLL: 'Sheduler.Management.dll'
       artifact: api
