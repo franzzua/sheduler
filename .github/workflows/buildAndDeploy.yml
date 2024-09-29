@@ -76,4 +76,4 @@ jobs:
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ inputs.SERVICE }}:${{ github.sha }}
-          secrets: /app/appsettings=${{ inputs.SECRET }}
+          secrets: /etc/appsettings=${{ inputs.SECRET }}
