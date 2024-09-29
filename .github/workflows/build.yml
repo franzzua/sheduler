@@ -23,11 +23,11 @@ jobs:
 
       - name: 'Publish Api'
         shell: bash
-        run: 'dotnet publish ./App/Sheduler.Management/ --no-build -c Release -r linux-x64 -o ./out/api'
+        run: 'dotnet publish ./App/Sheduler.Management/ --no-build -c Release -o ./out/api'
         
       - name: 'Publish Worker'
         shell: bash
-        run: 'dotnet publish ./App/Sheduler.Worker/ --no-build -c Release -r linux-x64 -o ./out/worker'
+        run: 'dotnet publish ./App/Sheduler.Worker/ --no-build -c Release -o ./out/worker'
 
       - name: Upload Worker Artifacts
         uses: actions/upload-artifact@v4
