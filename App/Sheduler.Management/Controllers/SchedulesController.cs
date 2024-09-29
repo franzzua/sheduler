@@ -13,8 +13,8 @@ public static class SchedulesController
         return group;
     }
 
-    private static async Task<IEnumerable<ScheduleViewModel>> GetAll(AppService app) => 
-        await app.GetAll();
+    private static async Task<ScheduleViewModel[]> GetAll(AppService app) => 
+        (await app.GetAll()).ToArray();
 
     private static async Task<ScheduleViewModel?> Get(string id, AppService app) => 
         await app.Get(id);

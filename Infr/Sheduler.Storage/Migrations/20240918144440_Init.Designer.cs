@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sheduler.Migrations;
-using Sheduler.Storage.Database;
+using Sheduler.Storage.Db;
 
 #nullable disable
 

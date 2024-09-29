@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Sheduler.Contracts.Models;
+
 // ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-namespace Sheduler.Storage.Database;
+namespace Sheduler.Storage.Db;
 
 [Table("Schedules")]
 public sealed class ScheduleEntity
@@ -25,8 +26,8 @@ public sealed class ScheduleEntity
     
     public static explicit operator Schedule(ScheduleEntity schedule)
     {
-        var scheduledTasks = schedule.Tasks.Select(t => new ScheduledTask(
-            t.Id, t.CronExpression, t.Url, t.LastInvocation)).ToList();
+        var scheduledTasks = schedule.Tasks?.Select(t => new ScheduledTask(
+            t.Id, t.CronExpression, t.Url, t.LastInvocation)).ToList() ?? [];
         return new Schedule(schedule.Id, schedule.Name, schedule.Description, scheduledTasks);
     }
     

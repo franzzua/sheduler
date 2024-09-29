@@ -2,23 +2,29 @@ using Sheduler.App;
 using Sheduler.Management;
 using Sheduler.Management.Controllers;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateSlimBuilder(args);
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+});
 builder.Services.AddApp(builder.Configuration);
+
+#if DEBUG
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+#endif
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+#if DEBUG
 {
     app.UseSwagger();
     app.UseSwaggerUI();
     app.Services.SaveSwaggerJson();
 }
+#endif
 
 SchedulesController.Map(app);
 
 app.Run();
-
-

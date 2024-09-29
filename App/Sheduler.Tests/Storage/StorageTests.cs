@@ -1,14 +1,18 @@
+using Microsoft.EntityFrameworkCore;
 using Sheduler.Contracts.Contracts;
 using Sheduler.Contracts.Models;
 using Sheduler.Storage;
+using Sheduler.Storage.Db;
 
 namespace Sheduler.Tests.Storage;
 
 [TestClass]
 public class StorageTests
 {
-    private readonly IScheduleStorage scheduleStorage =
-        new ScheduleStorage("Host=localhost;Database=schedules;Username=postgres;Password=password;Port=5432");
+    private const string cs = "Host=localhost;Database=schedules;Username=postgres;Password=password;Port=5432";
+    private readonly IScheduleStorage scheduleStorage = new ScheduleStorage(new ScheduleContext(new DbContextOptions<ScheduleContext>
+    {
+    }));
 
     [TestMethod]
     public async Task TestMethod1()

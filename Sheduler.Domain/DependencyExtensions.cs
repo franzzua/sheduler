@@ -8,8 +8,8 @@ public static class DependencyExtensions
 {
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
-        services.AddSingleton<IExecutor, ExecutorService>();
-        services.AddSingleton<ITaskService, TaskService>();
+        services.AddScoped<IExecutor, ExecutorService>();
+        services.AddScoped<ITaskService, TaskService>();
         return services;
     }
 }

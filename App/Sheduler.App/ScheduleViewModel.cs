@@ -1,8 +1,9 @@
+using System.Text.Json.Serialization;
 using Sheduler.Contracts.Models;
 
 namespace Sheduler.App;
 
-public class ScheduleViewModel
+public sealed class ScheduleViewModel
 {
     public required string Id { get; init; }
     public required string Name { get; init; }
@@ -40,7 +41,7 @@ public class ScheduleViewModel
     }
 }
 
-public class TaskViewModel
+public sealed class TaskViewModel
 {
     public required string Id { get; init; }
     

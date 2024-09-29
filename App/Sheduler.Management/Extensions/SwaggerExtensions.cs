@@ -1,3 +1,4 @@
+#if DEBUG
 using Microsoft.OpenApi.Extensions;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -13,3 +14,4 @@ public static class SwaggerExtensions
         File.WriteAllText("swaggerfile.json", swaggerFile);
     }
 }
+#endif

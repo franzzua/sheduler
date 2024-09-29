@@ -21,7 +21,7 @@ jobs:
       id-token: 'write'
     with:
       SERVICE: "sheduler-worker"
-      DLL: 'Sheduler.Worker.dll'
+      DLL: 'Sheduler.Worker'
       artifact: worker
       
   deploy-api:
@@ -33,5 +33,5 @@ jobs:
       id-token: 'write'
     with: 
       SERVICE: "sheduler-api"
-      DLL: 'Sheduler.Management.dll'
+      DLL: 'Sheduler.Management'
       artifact: api
