@@ -43,6 +43,7 @@ jobs:
         with:
           name: 'worker'
           region: ${{ env.REGION }}
+          project_id: ${{ env.PROJECT_ID }}
           runtime: 'dotnet8'
           source_dir: ./
           entry_point: Worker
@@ -74,6 +75,5 @@ jobs:
         with:
           service: management-api
           region: ${{ env.REGION }}
+          project_id: ${{ env.PROJECT_ID }}
           source: ./
-        
-  
