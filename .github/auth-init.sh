@@ -1,6 +1,8 @@
 #!/bin/bash
 projectId="awtor-sheduler"
+projectNumber="530662206793"
 githubOwner="franzzua"
+githubProject="sheduler"
 location="europe-west1"
 
 gcloud iam service-accounts create "github-deploy" --project "$projectId"
@@ -16,7 +18,6 @@ gcloud iam workload-identity-pools providers create-oidc "my-repo" \
   --attribute-condition="assertion.repository_owner == '$githubOwner'"  \
   --issuer-uri="https://token.actions.githubusercontent.com"
   
-  
 gcloud iam workload-identity-pools providers describe "my-repo" \
   --project="$projectId" \
   --location="global" \
@@ -26,10 +27,14 @@ gcloud iam workload-identity-pools providers describe "my-repo" \
 gcloud iam service-accounts add-iam-policy-binding "github-deploy@$projectId.iam.gserviceaccount.com" \
   --project="$projectId" \
   --role="roles/iam.workloadIdentityUser" \
-  --member="principalSet://iam.googleapis.com/projects/367509383184/locations/global/workloadIdentityPools/github/attribute.repository/AwtorGit/monorepo"
+  --member="principalSet://iam.googleapis.com/projects/$projectNumber/locations/global/workloadIdentityPools/github/attribute.repository/$githubOwner/$githubProject"
   
 gcloud projects add-iam-policy-binding $projectId \
   --role="roles/artifactregistry.repoAdmin" \
+  --member="serviceAccount:github-deploy@$projectId.iam.gserviceaccount.com"
+  
+gcloud projects add-iam-policy-binding $projectId \
+  --role="roles/cloudfunctions.developer" \
   --member="serviceAccount:github-deploy@$projectId.iam.gserviceaccount.com"
   
 gcloud projects add-iam-policy-binding $projectId \
@@ -48,6 +53,12 @@ gcloud projects add-iam-policy-binding $projectId \
   --role="roles/storage.admin" \
   --member="serviceAccount:github-deploy@$projectId.iam.gserviceaccount.com"
   
+gcloud projects add-iam-policy-binding $projectId \
+  --role="roles/artifactregistry.admin" \
+gcloud projects add-iam-policy-binding $projectId \
+  --role="roles/artifactregistry.admin" \
+  --member="serviceAccount:github-deploy@$projectId.iam.gserviceaccount.com"
+  --member="serviceAccount:github-deploy@$projectId.iam.gserviceaccount.com"
   
 gcloud iam service-accounts create "app-runner" --project "$projectId"
   
@@ -83,10 +94,12 @@ gcloud services enable logging.googleapis.com --project=$projectId
 gcloud services enable sql-component.googleapis.com --project=$projectId
 gcloud services enable monitoring.googleapis.com --project=$projectId
 gcloud services enable compute.googleapis.com --project=$projectId
+gcloud services enable cloudfunctions.googleapis.com --project=$projectId
 gcloud services enable iamcredentials.googleapis.com --project=$projectId
 gcloud services enable secretmanager.googleapis.com --project=$projectId
 gcloud services enable artifactregistry.googleapis.com --project=$projectId
 gcloud services enable run.googleapis.com --project=$projectId
+gcloud services enable cloudbuild.googleapis.com --project=$projectId
 #gcloud services enable translate.googleapis.com
 
 gcloud artifacts repositories create docker --repository-format=docker --location=$location

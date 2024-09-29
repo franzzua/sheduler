@@ -14,23 +14,20 @@ env:
   NODE_VERSION: '20.x'  
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
-    with:
-      DOTNET_VERSION: 8.0
+#  build:
+#    uses: ./.github/workflows/build.yml
+#    with:
+#      DOTNET_VERSION: 8.0
       
   deploy-worker:
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'
     steps:
-      - name: Download backend artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: worker
-
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+        
       - name: Google Auth
         id: auth
         uses: 'google-github-actions/auth@v2'
@@ -45,24 +42,21 @@ jobs:
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
           runtime: 'dotnet8'
-          source_dir: ./
+          source_dir: ./App/Sheduler.Worker
           entry_point: Worker
           cpu: 0.5
           memory: 512M
           service_account: app-runner@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
   
   deploy-api:
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'
     steps:
-      - name: Download backend artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: api
-
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+        
       - name: Google Auth
         id: auth
         uses: 'google-github-actions/auth@v2'
@@ -76,4 +70,4 @@ jobs:
           service: management-api
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
-          source: ./
+          source: ./App/Sheduler.Management
