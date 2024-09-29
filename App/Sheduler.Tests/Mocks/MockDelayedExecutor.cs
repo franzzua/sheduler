@@ -9,15 +9,16 @@ public class MockDelayedExecutor(IServiceProvider serviceProvider) : IDelayedExe
 {
     public Dictionary<string, DateTime> ExecutionTimes { get; } = new();
     
-    public async Task<string> Invoke(TimeSpan delay, string timetableId)
+    public Task<string> Invoke(TimeSpan delay, string timetableId)
     {
         ExecutionTimes[timetableId] = DateTime.UtcNow.Add(delay);
-        return timetableId;
+        return Task.FromResult(timetableId);
     }
 
-    public async Task Cancel(string token)
+    public Task Cancel(string token)
     {
         ExecutionTimes.Remove(token);
+        return Task.CompletedTask;
     }
 
     public void Run(string scheduleId)

@@ -6,7 +6,7 @@ public class MockExecutor : IExecutor
 {
     public Dictionary<string, IReadOnlyList<DateTime>> Invocations = new();
     
-    public async Task Invoke(string url, IReadOnlyList<DateTime> dateTimes)
+    public Task Invoke(string url, IReadOnlyList<DateTime> dateTimes)
     {
         if (Invocations.ContainsKey(url))
         {
@@ -16,5 +16,7 @@ public class MockExecutor : IExecutor
         {
             Invocations.Add(url, dateTimes.ToList());
         }
+
+        return Task.CompletedTask;
     }
 }

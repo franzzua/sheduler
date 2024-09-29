@@ -13,7 +13,7 @@ public class SchedulesController(AppService app) : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<ScheduleViewModel> Get(string id) => 
+    public async Task<ScheduleViewModel?> Get(string id) => 
         await app.Get(id);
     
     [HttpPost]

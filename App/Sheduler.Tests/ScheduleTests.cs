@@ -10,7 +10,7 @@ namespace Sheduler.Tests;
 [TestClass]
 public class ScheduleTests
 {
-    private static ServiceProvider ServiceProvider;
+    private static ServiceProvider _serviceProvider = null!;
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext _)
     {
@@ -18,15 +18,15 @@ public class ScheduleTests
         serviceCollection.AddDomain();
         serviceCollection.AddMocks();
         serviceCollection.AddScoped<AppService>();
-        ServiceProvider = serviceCollection.BuildServiceProvider();
+        _serviceProvider = serviceCollection.BuildServiceProvider();
     }
 
     [TestMethod]
     public async Task TestMethod1()
     {
-        var manager = ServiceProvider.GetService<AppService>()!;
-        var mockDelayedExecutor = (MockDelayedExecutor)ServiceProvider.GetService<IDelayedExecutor>()!;
-        var mockExecutor = (MockExecutor)ServiceProvider.GetService<IExecutor>()!;
+        var manager = _serviceProvider.GetService<AppService>()!;
+        var mockDelayedExecutor = (MockDelayedExecutor)_serviceProvider.GetService<IDelayedExecutor>()!;
+        var mockExecutor = (MockExecutor)_serviceProvider.GetService<IExecutor>()!;
         var schedule = new ScheduleViewModel
         {
             Id = Guid.NewGuid().ToString(),

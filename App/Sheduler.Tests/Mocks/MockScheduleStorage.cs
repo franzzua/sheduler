@@ -1,5 +1,6 @@
 using Sheduler.Contracts.Contracts;
 using Sheduler.Contracts.Models;
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
 namespace Sheduler.Tests.Mocks;
 
@@ -22,7 +23,14 @@ public class MockScheduleStorage : IScheduleStorage
 
     public async Task UpdateNextInvocation(Schedule schedule, TaskInvocation? taskInvocation)
     {
-        _invocations[schedule.Id] = taskInvocation;
+        if (taskInvocation == null)
+        {
+            _invocations.Remove(schedule.Id);
+        }
+        else
+        {
+            _invocations[schedule.Id] = taskInvocation;
+        }
     }
 
     public async Task<TaskInvocation?> GetNextInvocation(Schedule schedule)
