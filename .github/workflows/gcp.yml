@@ -18,7 +18,8 @@ jobs:
       id-token: 'write'
     with:
       DOTNET_VERSION: 8.0
-      SERVICE: "sheduler-api"
+      SERVICE: "sheduler-api${{ env.POSTFIX }}"
+      SECRET: "appsettings${{ env.POSTFIX }}"
       DLL: 'Sheduler.Management'
       PATH: ./App/Sheduler.Management/
   
