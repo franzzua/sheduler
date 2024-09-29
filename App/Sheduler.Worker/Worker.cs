@@ -1,17 +1,12 @@
-﻿using Google.Cloud.Functions.Framework;
-using Google.Cloud.Functions.Hosting;
-using Microsoft.AspNetCore.Http;
-using Sheduler.App;
+﻿using Sheduler.App;
 
 namespace Sheduler.Worker;
 
-[FunctionsStartup(typeof(Startup))]
-public class Worker(AppService appService) : IHttpFunction
+public static class Worker
 {
-    public async Task HandleAsync(HttpContext context)
+    public static async Task<IResult> HandleAsync(string id, AppService appService)
     {
-        var id = context.Request.Query["id"];
-        await appService.RunSchedule(id.First()!);
-        
+        await appService.RunSchedule(id);
+        return Results.NoContent();
     }
 }

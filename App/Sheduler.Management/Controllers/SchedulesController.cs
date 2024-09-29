@@ -1,25 +1,28 @@
-using Microsoft.AspNetCore.Mvc;
 using Sheduler.App;
 
 namespace Sheduler.Management.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class SchedulesController(AppService app) : ControllerBase
+public static class SchedulesController
 {
-    [HttpGet]
-    public async Task<IEnumerable<ScheduleViewModel>> GetAll() => 
+    public static RouteGroupBuilder Map(WebApplication app)
+    {
+        var group = app.MapGroup("Schedules");
+        group.MapGet("/", GetAll);
+        group.MapGet("/:id", Get);
+        group.MapPost("/", Create);
+        return group;
+    }
+
+    private static async Task<IEnumerable<ScheduleViewModel>> GetAll(AppService app) => 
         await app.GetAll();
 
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<ScheduleViewModel?> Get(string id) => 
+    private static async Task<ScheduleViewModel?> Get(string id, AppService app) => 
         await app.Get(id);
-    
-    [HttpPost]
-    public async Task<IActionResult> Create(ScheduleViewModel viewModel)
+
+    private static async Task<IResult> Create(ScheduleViewModel viewModel, AppService app)
     {
         await app.CreateSchedule(viewModel);
-        return NoContent();
+        return Results.NoContent();
     }
 }
+

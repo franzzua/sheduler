@@ -100,6 +100,7 @@ gcloud services enable secretmanager.googleapis.com --project=$projectId
 gcloud services enable artifactregistry.googleapis.com --project=$projectId
 gcloud services enable run.googleapis.com --project=$projectId
 gcloud services enable cloudbuild.googleapis.com --project=$projectId
+gcloud services enable cloudtasks.googleapis.com --project=$projectId
 #gcloud services enable translate.googleapis.com
 
-gcloud artifacts repositories create docker --repository-format=docker --location=$location
+gcloud artifacts repositories create docker --repository-format=docker --location=$location --project=$projectId

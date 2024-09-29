@@ -8,7 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Sheduler.Contracts\Sheduler.Contracts.csproj" />
+        <ProjectReference Include="..\..\Infr\Sheduler.Storage\Sheduler.Storage.csproj" />
+        <ProjectReference Include="..\..\Infr\Sheduler.Timers.GoogleQueue\Sheduler.Timers.GoogleQueue.csproj" />
+        <ProjectReference Include="..\..\Sheduler.Contracts\Sheduler.Contracts.csproj"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0"/>
+        <ProjectReference Include="..\..\Sheduler.Domain\Sheduler.Domain.csproj" />
     </ItemGroup>
 
 </Project>

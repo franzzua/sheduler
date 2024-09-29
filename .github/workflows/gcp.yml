@@ -45,7 +45,7 @@ jobs:
           name: 'worker'
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
-          runtime: 'dotnet8'
+          runtime: dotnet8
           source_dir: ./
           entry_point: Worker
           cpu: 0.5
