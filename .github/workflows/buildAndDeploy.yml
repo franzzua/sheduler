@@ -65,7 +65,7 @@ jobs:
           echo 'FROM mcr.microsoft.com/dotnet/aspnet:8.0' > Dockerfile
           echo 'COPY ./ /app' >> Dockerfile
           echo 'WORKDIR /app' >> Dockerfile
-          echo 'ENTRYPOINT ["./${{ inputs.DLL }}", "--urls=http://0.0.0.0:8080"]' >> Dockerfile
+          echo 'ENTRYPOINT ["dotnet", "./${{ inputs.DLL }}", "--urls=http://0.0.0.0:8080"]' >> Dockerfile
           docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ inputs.SERVICE }}:${{ github.sha }}" ./
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ inputs.SERVICE }}:${{ github.sha }}"
 
