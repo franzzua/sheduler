@@ -7,13 +7,22 @@ on:
       - develop
 
 jobs:
-  build:
+  build-api:
     uses: ./.github/workflows/build.yml
     with:
       DOTNET_VERSION: 8.0
-  
+      PATH: ./App/Sheduler.Management/
+      artifact: api
+      
+  build-worker:
+    uses: ./.github/workflows/build.yml
+    with:
+      DOTNET_VERSION: 8.0
+      PATH: ./App/Sheduler.Worker/
+      artifact: worker
+
   deploy-worker:
-    needs: build
+    needs: build-worker
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     permissions:
@@ -25,7 +34,7 @@ jobs:
       artifact: worker
       
   deploy-api:
-    needs: build
+    needs: build-api
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     permissions:

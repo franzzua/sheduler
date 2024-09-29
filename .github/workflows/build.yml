@@ -5,6 +5,12 @@ on:
       DOTNET_VERSION:
         required: true
         type: string
+      PATH:
+        required: true
+        type: string
+      artifact:
+        required: true
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,24 +23,12 @@ jobs:
         with:
           dotnet-version: ${{ inputs.DOTNET_VERSION }}
           
-      - name: 'Publish Api'
+      - name: 'Publish'
         shell: bash
-        run: 'dotnet publish ./App/Sheduler.Management/ -c Release -o ./out/api'
-        
-      - name: 'Publish Worker'
-        shell: bash
-        run: 'dotnet publish ./App/Sheduler.Worker/ -c Release -o ./out/worker'
-
-      - name: Upload Worker Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: worker
-          path: |
-            ./out/worker       
+        run: 'dotnet publish ${{ inputs.PATH }} -c Release -o ./out'
             
       - name: Upload Api artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: api
-          path: |
-            ./out/api       
+          name: ${{ inputs.artifact }}
+          path: ./out       
