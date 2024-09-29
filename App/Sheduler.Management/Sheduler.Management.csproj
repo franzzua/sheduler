@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <PublishAot>true</PublishAot>
         <StripSymbols>true</StripSymbols>
     </PropertyGroup>
