@@ -7,40 +7,26 @@ on:
       - develop
 
 jobs:
-  build-api:
-    uses: ./.github/workflows/build.yml
-    with:
-      DOTNET_VERSION: 8.0
-      PATH: ./App/Sheduler.Management/
-      artifact: api
-      
-  build-worker:
-    uses: ./.github/workflows/build.yml
-    with:
-      DOTNET_VERSION: 8.0
-      PATH: ./App/Sheduler.Worker/
-      artifact: worker
-
-  deploy-worker:
-    needs: build-worker
-    uses: ./.github/workflows/deploy.yml
+  api:
+    uses: ./.github/workflows/buildAndDeploy.yml
     secrets: inherit
     permissions:
       contents: 'read'
       id-token: 'write'
     with:
-      SERVICE: "sheduler-worker"
-      DLL: 'Sheduler.Worker'
-      artifact: worker
-      
-  deploy-api:
-    needs: build-api
-    uses: ./.github/workflows/deploy.yml
-    secrets: inherit
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    with: 
+      DOTNET_VERSION: 8.0
       SERVICE: "sheduler-api"
       DLL: 'Sheduler.Management'
-      artifact: api
+      PATH: ./App/Sheduler.Management/
+  
+  worker:
+    uses: ./.github/workflows/buildAndDeploy.yml
+    secrets: inherit
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    with:
+      DOTNET_VERSION: 8.0
+      SERVICE: "sheduler-worker"
+      DLL: 'Sheduler.Worker'
+      PATH: ./App/Sheduler.Worker/

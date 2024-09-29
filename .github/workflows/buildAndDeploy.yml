@@ -1,34 +1,37 @@
-name: deploy.yml
+name: build.yml
 on:
   workflow_call: 
     inputs: 
-      SERVICE:
+      DOTNET_VERSION:
         required: true
         type: string
-      artifact:
+      PATH:
+        required: true
+        type: string
+      SERVICE:
         required: true
         type: string
       DLL:
         required: true
         type: string
-
-env:
-  PROJECT_ID: awtor-sheduler
-  GAR_LOCATION: europe-west1
-  REPOSITORY: docker
-  REGION: europe-west1
-
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'
     steps:
-      - name: Download backend artifacts
-        uses: actions/download-artifact@v4
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+      
+      - name: 'Setup .NET'
+        uses: actions/setup-dotnet@v4
         with:
-          name: ${{ inputs.artifact }}
+          dotnet-version: ${{ inputs.DOTNET_VERSION }}
+          
+      - name: 'Publish'
+        shell: bash
+        run: 'dotnet publish ${{ inputs.PATH }} -c Release -o ./out'
 
       - name: Google Auth
         id: auth
@@ -47,6 +50,7 @@ jobs:
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
 
       - name: Build and Push Container
+        working-directory: ./out
         run: |-
           echo 'FROM mcr.microsoft.com/dotnet/aspnet:8.0' > Dockerfile
           echo 'COPY ./ /app' >> Dockerfile
