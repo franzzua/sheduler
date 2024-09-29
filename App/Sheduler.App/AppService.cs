@@ -10,8 +10,8 @@ public class AppService(
 
     public async Task CreateSchedule(ScheduleViewModel schedule)
     {
-        await scheduleStorage.CreateSchedule(schedule);
-        await taskService.UpdateTask(schedule);
+        await scheduleStorage.CreateSchedule(schedule!);
+        await taskService.UpdateTask(schedule!);
     }
 
     public async Task RunSchedule(string scheduleId)
@@ -23,7 +23,7 @@ public class AppService(
         await taskService.UpdateTask(schedule);
     }
 
-    public async Task<ScheduleViewModel> Get(string id)
+    public async Task<ScheduleViewModel?> Get(string id)
     {
         return await scheduleStorage.Get(id);
     }

@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace Sheduler.Storage.Database;
 
 [Table("Tasks")]
-public class TaskEntity 
+public sealed class TaskEntity 
 {
     public string Id { get; set; }
     public string ScheduleId { get; set; }
@@ -14,5 +17,5 @@ public class TaskEntity
     
     public DateTime LastInvocation { get; set; }
     
-    public virtual ScheduleEntity Schedule { get; set; }
+    public ScheduleEntity Schedule { get; set; }
 }

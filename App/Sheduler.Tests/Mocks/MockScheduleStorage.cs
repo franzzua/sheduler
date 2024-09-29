@@ -20,7 +20,7 @@ public class MockScheduleStorage : IScheduleStorage
         return schedule.Tasks;
     }
 
-    public async Task UpdateNextInvocation(Schedule schedule, TaskInvocation taskInvocation)
+    public async Task UpdateNextInvocation(Schedule schedule, TaskInvocation? taskInvocation)
     {
         _invocations[schedule.Id] = taskInvocation;
     }

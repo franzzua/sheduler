@@ -9,7 +9,7 @@ public interface IScheduleStorage
     public Task<Schedule?> Get(string scheduleId);
     public Task<IReadOnlyList<ScheduledTask>> GetReadyTasks(string id);
     
-    public Task UpdateNextInvocation(Schedule schedule, TaskInvocation taskInvocation);
+    public Task UpdateNextInvocation(Schedule schedule, TaskInvocation? taskInvocation);
     
     public Task<TaskInvocation?> GetNextInvocation(Schedule schedule);
     public Task Delete(string scheduleId);

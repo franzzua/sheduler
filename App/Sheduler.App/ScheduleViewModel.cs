@@ -4,23 +4,25 @@ namespace Sheduler.App;
 
 public class ScheduleViewModel
 {
-    public string Id { get; set; }
-    public string Name { get; set; }
-    public string? Description { get; set; }
+    public required string Id { get; init; }
+    public required string Name { get; init; }
+    public string? Description { get; init; }
     
-    public IList<TaskViewModel> Tasks { get; set; } = new List<TaskViewModel>();
+    public IList<TaskViewModel> Tasks { get; init; } = new List<TaskViewModel>();
 
-    public static implicit operator Schedule(ScheduleViewModel viewModel)
+    public static implicit operator Schedule?(ScheduleViewModel? viewModel)
     {
+        if (viewModel == null) return null;
         var tasks = viewModel.Tasks
             .Select(x => new ScheduledTask(x.Id, x.CronExpression, x.Uri, DateTime.UtcNow))
             .ToList();
         return new Schedule(viewModel.Id, viewModel.Name, viewModel.Description, tasks);
     }
     
-    public static implicit operator ScheduleViewModel(Schedule viewModel)
+    public static implicit operator ScheduleViewModel?(Schedule? model)
     {
-        var tasks = viewModel.Tasks
+        if (model == null) return null;
+        var tasks = model.Tasks
             .Select(x => new TaskViewModel
             {
                 Id = x.Id,
@@ -30,9 +32,9 @@ public class ScheduleViewModel
             .ToList();
         return new ScheduleViewModel
         {
-            Id = viewModel.Id,
-            Name = viewModel.Name,
-            Description = viewModel.Description,
+            Id = model.Id,
+            Name = model.Name,
+            Description = model.Description,
             Tasks = tasks
         };
     }
@@ -40,9 +42,9 @@ public class ScheduleViewModel
 
 public class TaskViewModel
 {
-    public string Id { get; set; }
+    public required string Id { get; init; }
     
-    public string CronExpression { get; set; }
+    public required string CronExpression { get; init; }
     
-    public string Uri { get; set; }
+    public required string Uri { get; init; }
 }
