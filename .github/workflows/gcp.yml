@@ -28,7 +28,7 @@ jobs:
       id-token: 'write'
     with:
       DOTNET_VERSION: 8.0
-      SERVICE: "sheduler-worker${{ if (github.ref == 'refs/heads/main') && '-prod' || '-dev' }}"
+      SERVICE: "sheduler-worker${{ github.ref == 'refs/heads/main' && '-prod' || '-dev' }}"
       SECRET: "appsettings${{ github.ref == 'refs/heads/main' && '-prod' || '-dev' }}"
       DLL: 'Sheduler.Worker.dll'
       PATH: ./App/Sheduler.Worker/
