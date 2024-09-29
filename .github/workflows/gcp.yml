@@ -1,0 +1,75 @@
+﻿name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+env:
+  PROJECT_ID: awtor-sheduler
+  GAR_LOCATION: europe-west1
+  REPOSITORY: docker
+  REGION: europe-west1
+  NODE_VERSION: '20.x'  
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      DOTNET_VERSION: 8.0
+      
+  deploy-worker:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download backend artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: worker
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+          service_account: 'github-deploy@awtorart.iam.gserviceaccount.com' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
+
+      - name: Deploy Sheduler.Worker
+        uses: 'google-github-actions/deploy-cloud-functions@v3'
+        with:
+          name: 'worker'
+          region: ${{ env.REGION }}
+          runtime: 'dotnet8'
+          source_dir: './App/Sheduler.Worker'
+          entry_point: Worker
+          cpu: 0.5
+          memory: 512M
+          service_account: app-runner@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+  
+  deploy-api:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download backend artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: api
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+          service_account: 'github-deploy@awtorart.iam.gserviceaccount.com' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
+
+      - name: Deploy Api
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: management-api
+          region: ${{ env.REGION }}
+          source: ./
+        
+  

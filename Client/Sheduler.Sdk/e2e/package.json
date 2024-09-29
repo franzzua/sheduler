@@ -1,0 +1,10 @@
+{
+	"name": "@sheduler/e2e",
+	"scripts": {
+		"monkey": "nodemon ./dist/esm/index.js"
+	},
+	"type": "module",
+	"dependencies": {
+		"@sheduler/sdk": "workspace:*"
+	}
+}

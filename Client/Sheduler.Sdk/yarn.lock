@@ -5,6 +5,14 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@sheduler/e2e@workspace:e2e":
+  version: 0.0.0-use.local
+  resolution: "@sheduler/e2e@workspace:e2e"
+  dependencies:
+    "@sheduler/sdk": "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "@sheduler/monorepo@workspace:.":
   version: 0.0.0-use.local
   resolution: "@sheduler/monorepo@workspace:."
@@ -14,7 +22,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sheduler/sdk@workspace:sdk":
+"@sheduler/sdk@workspace:*, @sheduler/sdk@workspace:sdk":
   version: 0.0.0-use.local
   resolution: "@sheduler/sdk@workspace:sdk"
   languageName: unknown

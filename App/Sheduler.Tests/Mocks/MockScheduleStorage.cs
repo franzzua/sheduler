@@ -40,6 +40,10 @@ public class MockScheduleStorage : IScheduleStorage
         return _schedules.Values.ToList();
     }
 
+    public async Task UpdateTaskInvocation(ScheduledTask scheduledTask)
+    {
+    }
+
     public async Task<Schedule?> Get(string scheduleId)
     {
         return _schedules.GetValueOrDefault(scheduleId);

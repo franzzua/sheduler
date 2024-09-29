@@ -1,7 +1,9 @@
-import { paths } from "./openapi";
-import { Schedule } from "../types";
+import { paths } from "./openapi.js";
+import type { Schedule } from "../types";
 
 export class Api {
+    constructor(private baseUrl: string) {
+    }
     public getAll(){
         return this.fetch<Schedule[]>("/Schedules", {
             method: "GET",
@@ -22,7 +24,7 @@ export class Api {
     }
 
     private async fetch<T>(path: keyof paths, options: RequestInit & {
-        params?: Record<string, string | number>
+        params?: Record<string, string | number>,
     }): Promise<T> {
         let url = path as string;
         if (options.params){
@@ -30,8 +32,16 @@ export class Api {
                 url = url.replace(`{${key}}`, options.params[key].toString());
             }
         }
-        const response = await fetch(url, options);
+        const response = await fetch(this.baseUrl + url, {
+            ...options,
+            headers: {
+                ...options.headers,
+                'Content-Type': 'application/json'
+            }
+        });
         if (response.ok) {
+            if (response.status == 204)
+                return undefined as T;
             return await response.json() as T;
         } else {
             throw new Error(await response.text());

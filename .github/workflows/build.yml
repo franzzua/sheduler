@@ -1,0 +1,36 @@
+name: build.yml
+on:
+  workflow_call: 
+    inputs: 
+      DOTNET_VERSION:
+        required: true
+        type: string
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+      
+      - name: 'Setup .NET'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.DOTNET_VERSION }}
+          
+      - name: 'Build'
+        shell: bash
+        run: 'dotnet build -c Release'
+        
+      - name: Upload Worker Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: worker
+          path: |
+            ./App/Sheduler.Worker/bin/Release/net8.0       
+            
+      - name: Upload Api artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: api
+          path: |
+            ./App/Sheduler.Management/bin/Release/net8.0

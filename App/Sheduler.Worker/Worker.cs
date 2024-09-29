@@ -2,8 +2,6 @@
 using Google.Cloud.Functions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Sheduler.App;
-using Sheduler.Contracts.Contracts;
-using Sheduler.Domain.Services;
 
 namespace Sheduler.Worker;
 

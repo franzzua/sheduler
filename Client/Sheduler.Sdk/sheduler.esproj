@@ -6,6 +6,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <Script Include="e2e\src\helpers.ts" />
+    <Script Include="e2e\src\index.ts" />
+    <Script Include="e2e\src\monkey.ts" />
+    <Script Include="e2e\tsconfig.json" />
     <Script Include="sdk\src\api\api.ts" />
     <Script Include="sdk\src\index.ts" />
     <Script Include="sdk\src\types\index.ts" />

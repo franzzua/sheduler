@@ -13,8 +13,9 @@ public class InvokeEntity
     
     public DateTime DateTime { get; set; }
 
-    public static explicit operator TaskInvocation(InvokeEntity invoke)
+    public static explicit operator TaskInvocation?(InvokeEntity? invoke)
     {
+        if (invoke == null) return null;
         return new TaskInvocation(invoke.Id, invoke.DateTime);
     }
     

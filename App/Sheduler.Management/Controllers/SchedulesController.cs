@@ -17,6 +17,9 @@ public class SchedulesController(AppService app) : ControllerBase
         await app.Get(id);
     
     [HttpPost]
-    public async Task Create(ScheduleViewModel viewModel) => 
+    public async Task<IActionResult> Create(ScheduleViewModel viewModel)
+    {
         await app.CreateSchedule(viewModel);
+        return NoContent();
+    }
 }

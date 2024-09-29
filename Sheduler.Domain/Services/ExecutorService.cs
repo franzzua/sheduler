@@ -10,7 +10,7 @@ internal class ExecutorService : IExecutor
         var message = new HttpRequestMessage(HttpMethod.Get, url);
         foreach (var dateTime in dateTimes)
         {
-            message.Headers.Add("date", dateTime.ToString("O"));
+            message.Headers.TryAddWithoutValidation("datetime", dateTime.ToFileTimeUtc().ToString());
         }
         await _httpClient.SendAsync(message);
     }

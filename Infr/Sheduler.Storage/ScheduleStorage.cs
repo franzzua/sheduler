@@ -41,23 +41,26 @@ public class ScheduleStorage(string connectionString) : IScheduleStorage
         return scheduledTasks;
     }
 
-    public async Task UpdateNextInvocation(Schedule schedule, TaskInvocation taskInvocation)
+    public async Task UpdateNextInvocation(Schedule schedule, TaskInvocation? taskInvocation)
     {
         await using var context = new ScheduleContext(connectionString);
         await context.Invokes.Where(x => x.ScheduleId == schedule.Id).ExecuteDeleteAsync();
-        context.Add(new InvokeEntity
+        if (taskInvocation != null)
         {
-            Id = taskInvocation.Id,
-            ScheduleId = schedule.Id,
-            DateTime = taskInvocation.Time
-        });
-        await context.SaveChangesAsync();
+            context.Add(new InvokeEntity
+            {
+                Id = taskInvocation.Id,
+                ScheduleId = schedule.Id,
+                DateTime = taskInvocation.Time
+            });
+            await context.SaveChangesAsync();
+        }
     }
 
     public async Task<TaskInvocation?> GetNextInvocation(Schedule schedule)
     {
         await using var context = new ScheduleContext(connectionString);
-        return (TaskInvocation) await context.Invokes.SingleAsync(x => x.ScheduleId == schedule.Id);
+        return (TaskInvocation?) await context.Invokes.SingleOrDefaultAsync(x => x.ScheduleId == schedule.Id);
     }
 
     public async Task Delete(string scheduleId)
@@ -70,5 +73,13 @@ public class ScheduleStorage(string connectionString) : IScheduleStorage
     {
         await using var context = new ScheduleContext(connectionString);
         return (await context.Schedules.ToListAsync()).Select(x => (Schedule)x).ToList();
+    }
+
+    public async Task UpdateTaskInvocation(ScheduledTask scheduledTask)
+    {
+        await using var context = new ScheduleContext(connectionString);
+        await context.Tasks.Where(x => x.Id == scheduledTask.Id).ExecuteUpdateAsync(
+            x => x.SetProperty(t => t.LastInvocation, DateTime.UtcNow)
+        );
     }
 }

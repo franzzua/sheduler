@@ -1,1 +1,2 @@
-export { Api } from "./api/api";
+export { Api } from "./api/api.js";
+export type * from "./types";

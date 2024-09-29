@@ -1,3 +1,4 @@
+using Google.Api.Gax.ResourceNames;
 using Google.Cloud.Tasks.V2;
 using Google.Protobuf.WellKnownTypes;
 using Sheduler.Contracts.Contracts;
@@ -8,22 +9,30 @@ using HttpMethod = Google.Cloud.Tasks.V2.HttpMethod;
 namespace Sheduler.Timers.GoogleQueue;
 
 public class GoogleTaskExecutor(
-    string queueName,
+    QueueName queueName,
     string handler
     ) : IDelayedExecutor
 {
     private readonly CloudTasksClient _client = CloudTasksClient.Create();
 
-    private async Task<QueueName> GetQueueName()
-    {
-        return (await AsyncEnumerable.Create(_ => _client.ListQueuesAsync(new ListQueuesRequest
-        {
-            Filter = queueName
-        }).GetAsyncEnumerator(_)).FirstAsync()).QueueName;
-    }
 
     public async Task<string> Invoke(TimeSpan delay, string timetableId)
     {
+        try
+        {
+            var queue = await _client.GetQueueAsync(queueName);
+        }
+        catch
+        {
+            await _client.CreateQueueAsync(new CreateQueueRequest
+            {
+                ParentAsLocationName = new LocationName(queueName.ProjectId, queueName.LocationId),
+                Queue = new Queue
+                {
+                    QueueName = queueName,
+                }
+            });
+        }
         var task = await _client.CreateTaskAsync(new CreateTaskRequest
         {
             Task = new CloudTask
@@ -35,13 +44,21 @@ public class GoogleTaskExecutor(
                     HttpMethod = HttpMethod.Get,
                 }
             },
-            ParentAsQueueName = await GetQueueName(),
+            ParentAsQueueName = queueName
         });
         return task.Name;
     }
 
     public async Task Cancel(string token)
     {
-        await _client.DeleteTaskAsync(token);
+        try
+        {
+            await _client.DeleteTaskAsync(token);
+        }
+        catch
+        {
+            
+        }
     }
 }
+

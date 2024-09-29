@@ -1,8 +1,13 @@
 {
 	"name": "@sheduler/monorepo",
 	"workspaces": [
-		"sdk"
+		"./sdk",
+		"./e2e"
 	],
+	"scripts": {
+		"compile": "tsc -b",
+		"compile:watch": "tsc -b --watch"
+	},
 	"devDependencies": {
 		"@types/node": "20.16.10",
 		"typescript": "5.6.2"

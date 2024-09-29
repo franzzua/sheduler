@@ -18,6 +18,7 @@ public class AppService(
     {
         var schedule = await scheduleStorage.Get(scheduleId);
         if (schedule == null) throw new Exception();
+        await scheduleStorage.UpdateNextInvocation(schedule, null);
         await taskService.Run(schedule);
         await taskService.UpdateTask(schedule);
     }

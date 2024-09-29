@@ -15,12 +15,13 @@ internal class TaskService(
     {
         var nextInvocation = await scheduleStorage.GetNextInvocation(schedule); 
         var next = GetNextOccurence(schedule);
+        Console.WriteLine($"Now: {DateTime.UtcNow:o}, next: {next:o}");
         if (next == nextInvocation?.Time) return;
         if (nextInvocation != null)
             await delayedExecutor.Cancel(nextInvocation.Id);
         if (next != null)
         {
-            var nextTaskId = await delayedExecutor.Invoke(next.Value - DateTime.Now, schedule.Id);
+            var nextTaskId = await delayedExecutor.Invoke(next.Value - DateTime.UtcNow, schedule.Id);
             await scheduleStorage.UpdateNextInvocation(schedule, new TaskInvocation(nextTaskId, next.Value));
         }
     }
@@ -31,6 +32,7 @@ internal class TaskService(
         {
             var missed = GetMissed(scheduledTask);
             await executor.Invoke(scheduledTask.Url, missed);
+            await scheduleStorage.UpdateTaskInvocation(scheduledTask);
         }
     }
     

@@ -3,7 +3,7 @@
 		"target": "es2021",
 		"useDefineForClassFields": false,
 		"lib": ["ES2020"],
-		"module": "ESNext",
+		"module": "NodeNext",
 		"skipLibCheck": true,
 		"composite": true,
 		"esModuleInterop": true,
@@ -11,7 +11,7 @@
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
 		/* Bundler mode */
-		"moduleResolution": "bundler",
+		"moduleResolution": "NodeNext",
 		"resolveJsonModule": true,
 		"allowJs": true,
 		"isolatedModules": true,
@@ -28,6 +28,9 @@
 	"references": [
 		{
 			"path": "sdk"
+		},
+		{
+			"path": "e2e"
 		}
 	]
 }

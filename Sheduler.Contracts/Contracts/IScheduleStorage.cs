@@ -14,4 +14,5 @@ public interface IScheduleStorage
     public Task<TaskInvocation?> GetNextInvocation(Schedule schedule);
     public Task Delete(string scheduleId);
     public Task<IList<Schedule>> GetAll();
+    public Task UpdateTaskInvocation(ScheduledTask scheduledTask);
 }
