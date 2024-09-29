@@ -44,7 +44,7 @@ jobs:
           name: 'worker'
           region: ${{ env.REGION }}
           runtime: 'dotnet8'
-          source_dir: './App/Sheduler.Worker'
+          source_dir: ./
           entry_point: Worker
           cpu: 0.5
           memory: 512M
