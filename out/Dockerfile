@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/nightly/runtime-deps:8.0-alpine-aot
-COPY ./api/* /home/app/
-WORKDIR /home/app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+COPY ./worker/* /app/
+WORKDIR /app
 CMD sh
