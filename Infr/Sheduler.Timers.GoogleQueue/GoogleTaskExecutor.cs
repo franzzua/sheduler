@@ -18,21 +18,6 @@ public class GoogleTaskExecutor(
 
     public async Task<string> Invoke(TimeSpan delay, string timetableId)
     {
-        try
-        {
-            var queue = await _client.GetQueueAsync(queueName);
-        }
-        catch
-        {
-            await _client.CreateQueueAsync(new CreateQueueRequest
-            {
-                ParentAsLocationName = new LocationName(queueName.ProjectId, queueName.LocationId),
-                Queue = new Queue
-                {
-                    QueueName = queueName,
-                }
-            });
-        }
         var task = await _client.CreateTaskAsync(new CreateTaskRequest
         {
             Task = new CloudTask

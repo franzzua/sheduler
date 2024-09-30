@@ -2,7 +2,8 @@ import { Api } from "@sheduler/sdk"
 import { Monkey } from "./monkey.js";
 import { createServer } from "http";
 
-const api = new Api("http://sheduler-api-dev.web.app");
+// const api = new Api("http://localhost:5013");
+const api = new Api("https://sheduler-api-dev.web.app");
 
 const port = 3000;
 

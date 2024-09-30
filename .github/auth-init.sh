@@ -85,6 +85,10 @@ gcloud projects add-iam-policy-binding $projectId \
 gcloud projects add-iam-policy-binding $projectId \
   --role="roles/secretmanager.secretAccessor" \
   --member="serviceAccount:app-runner@$projectId.iam.gserviceaccount.com"
+  
+gcloud projects add-iam-policy-binding $projectId \
+  --role="roles/cloudtasks.admin" \
+  --member="serviceAccount:app-runner@$projectId.iam.gserviceaccount.com"
 
 #gcloud services enable aiplatform.googleapis.com
 #gcloud services enable analytics.googleapis.com
