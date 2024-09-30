@@ -1,5 +1,4 @@
 using Sheduler.App;
-using Sheduler.Management;
 using Sheduler.Management.Controllers;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -10,10 +9,6 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
 builder.Services.AddApp(builder.Configuration);
-
-var test = new HttpClient();
-var res = await test.GetAsync("https://google.com");
-Console.WriteLine($"https://google.com say {res.StatusCode}");
 
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
