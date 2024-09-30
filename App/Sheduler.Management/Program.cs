@@ -4,7 +4,7 @@ using Sheduler.Management.Controllers;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Configuration.AddJsonFile("/etc/appsettings", true, true);
+builder.Configuration.AddJsonFile("/home/appsettings", true, true);
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);

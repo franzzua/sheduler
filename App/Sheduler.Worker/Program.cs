@@ -3,7 +3,7 @@ using Sheduler.Worker;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Configuration.AddJsonFile("/etc/appsettings", true, true);
+builder.Configuration.AddJsonFile("/home/appsettings", true, true);
 builder.Services.AddApp(builder.Configuration);
 
 var test = new HttpClient();
