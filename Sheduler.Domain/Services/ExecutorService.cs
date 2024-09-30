@@ -11,6 +11,7 @@ internal class ExecutorService : IExecutor
         foreach (var dateTime in dateTimes)
         {
             message.Headers.TryAddWithoutValidation("datetime", dateTime.ToFileTimeUtc().ToString());
+            message.Headers.TryAddWithoutValidation("ngrok-skip-browser-warning", "*");
         }
         await _httpClient.SendAsync(message);
     }

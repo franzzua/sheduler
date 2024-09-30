@@ -1,4 +1,3 @@
-using Google.Api.Gax.ResourceNames;
 using Google.Cloud.Tasks.V2;
 using Google.Protobuf.WellKnownTypes;
 using Sheduler.Contracts.Contracts;
