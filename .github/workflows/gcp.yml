@@ -17,7 +17,7 @@ jobs:
       DOTNET_VERSION: 8.0
       SERVICE: "sheduler-api${{ github.ref == 'refs/heads/main' && '-prod' || '-dev' }}"
       SECRET: "appsettings${{ github.ref == 'refs/heads/main' && '-prod' || '-dev' }}"
-      DLL: 'Sheduler.Management.dll'
+      DLL: 'Sheduler.Management'
       PATH: ./App/Sheduler.Management/
   
   worker:
@@ -30,5 +30,5 @@ jobs:
       DOTNET_VERSION: 8.0
       SERVICE: "sheduler-worker${{ github.ref == 'refs/heads/main' && '-prod' || '-dev' }}"
       SECRET: "appsettings${{ github.ref == 'refs/heads/main' && '-prod' || '-dev' }}"
-      DLL: 'Sheduler.Worker.dll'
+      DLL: 'Sheduler.Worker'
       PATH: ./App/Sheduler.Worker/
