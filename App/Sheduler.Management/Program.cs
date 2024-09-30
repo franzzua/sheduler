@@ -11,6 +11,10 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 builder.Services.AddApp(builder.Configuration);
 
+var test = new HttpClient();
+var res = await test.GetAsync("https://google.com");
+Console.WriteLine($"https://google.com say {res.StatusCode}");
+
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
