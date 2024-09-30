@@ -108,3 +108,5 @@ gcloud services enable cloudtasks.googleapis.com --project=$projectId
 #gcloud services enable translate.googleapis.com
 
 gcloud artifacts repositories create docker --repository-format=docker --location=$location --project=$projectId
+gcloud tasks queues create scheduler-prod --project=$projectId --location=$location
+gcloud tasks queues create scheduler-dev --project=$projectId --location=$location

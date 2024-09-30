@@ -18,20 +18,27 @@ public class GoogleTaskExecutor(
 
     public async Task<string> Invoke(TimeSpan delay, string timetableId)
     {
-        var task = await _client.CreateTaskAsync(new CreateTaskRequest
+        try
         {
-            Task = new CloudTask
+            var task = await _client.CreateTaskAsync(new CreateTaskRequest
             {
-                ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow + delay),
-                HttpRequest = new HttpRequest
+                Task = new CloudTask
                 {
-                    Url = handler + $"?id={timetableId}",
-                    HttpMethod = HttpMethod.Get,
-                }
-            },
-            ParentAsQueueName = queueName
-        });
-        return task.Name;
+                    ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow + delay),
+                    HttpRequest = new HttpRequest
+                    {
+                        Url = handler + $"?id={timetableId}",
+                        HttpMethod = HttpMethod.Get,
+                    }
+                },
+                ParentAsQueueName = queueName
+            });
+            return task.Name;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception($"Failed to create task, {queueName}", ex);
+        }
     }
 
     public async Task Cancel(string token)
