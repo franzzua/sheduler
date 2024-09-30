@@ -16,7 +16,7 @@ export class Monkey {
         } as Task))
     };
     constructor(private api: Api, private uri: string) {
-        this.api.add(this.schedule).catch(console.error);
+        this.api.add(this.schedule).then(() => console.log(`created ${this.id}`)).catch(console.error);
     }
 
 }

@@ -85,6 +85,10 @@ gcloud projects add-iam-policy-binding $projectId \
 gcloud projects add-iam-policy-binding $projectId \
   --role="roles/secretmanager.secretAccessor" \
   --member="serviceAccount:app-runner@$projectId.iam.gserviceaccount.com"
+  
+gcloud projects add-iam-policy-binding $projectId \
+  --role="roles/cloudtasks.admin" \
+  --member="serviceAccount:app-runner@$projectId.iam.gserviceaccount.com"
 
 #gcloud services enable aiplatform.googleapis.com
 #gcloud services enable analytics.googleapis.com
@@ -104,3 +108,5 @@ gcloud services enable cloudtasks.googleapis.com --project=$projectId
 #gcloud services enable translate.googleapis.com
 
 gcloud artifacts repositories create docker --repository-format=docker --location=$location --project=$projectId
+gcloud tasks queues create scheduler-prod --project=$projectId --location=$location
+gcloud tasks queues create scheduler-dev --project=$projectId --location=$location

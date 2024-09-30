@@ -1,4 +1,3 @@
-using Google.Api.Gax.ResourceNames;
 using Google.Cloud.Tasks.V2;
 using Google.Protobuf.WellKnownTypes;
 using Sheduler.Contracts.Contracts;
@@ -20,33 +19,25 @@ public class GoogleTaskExecutor(
     {
         try
         {
-            var queue = await _client.GetQueueAsync(queueName);
-        }
-        catch
-        {
-            await _client.CreateQueueAsync(new CreateQueueRequest
+            var task = await _client.CreateTaskAsync(new CreateTaskRequest
             {
-                ParentAsLocationName = new LocationName(queueName.ProjectId, queueName.LocationId),
-                Queue = new Queue
+                Task = new CloudTask
                 {
-                    QueueName = queueName,
-                }
+                    ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow + delay),
+                    HttpRequest = new HttpRequest
+                    {
+                        Url = handler + $"?id={timetableId}",
+                        HttpMethod = HttpMethod.Get,
+                    }
+                },
+                ParentAsQueueName = queueName
             });
+            return task.Name;
         }
-        var task = await _client.CreateTaskAsync(new CreateTaskRequest
+        catch(Exception ex)
         {
-            Task = new CloudTask
-            {
-                ScheduleTime = Timestamp.FromDateTime(DateTime.UtcNow + delay),
-                HttpRequest = new HttpRequest
-                {
-                    Url = handler + $"?id={timetableId}",
-                    HttpMethod = HttpMethod.Get,
-                }
-            },
-            ParentAsQueueName = queueName
-        });
-        return task.Name;
+            throw new Exception($"Failed to create task, {queueName}", ex);
+        }
     }
 
     public async Task Cancel(string token)

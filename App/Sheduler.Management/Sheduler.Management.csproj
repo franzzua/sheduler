@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <PublishAot>true</PublishAot>
+        <PublishAot>false</PublishAot>
         <StripSymbols>true</StripSymbols>
     </PropertyGroup>
 

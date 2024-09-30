@@ -2,11 +2,12 @@ import { Api } from "@sheduler/sdk"
 import { Monkey } from "./monkey.js";
 import { createServer } from "http";
 
-const api = new Api("http://localhost:5013");
+// const api = new Api("http://localhost:5013");
+const api = new Api("https://sheduler-api-dev.web.app");
 
 const port = 3000;
 
-const monkey = new Monkey(api, 'http://localhost:3000');
+const monkey = new Monkey(api, `https://5e68-91-126-65-143.ngrok-free.app`);
 
 const server = createServer();
 server.addListener('request', (req, res) => {
