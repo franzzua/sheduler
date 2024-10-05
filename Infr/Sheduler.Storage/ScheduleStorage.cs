@@ -6,7 +6,7 @@ using Sheduler.Storage.Db;
 
 namespace Sheduler.Storage;
 
-public class ScheduleStorage(ScheduleContext context) : IScheduleStorage
+internal class ScheduleStorage(ScheduleContext context) : IScheduleStorage
 {
     public async Task CreateSchedule(Schedule schedule)
     {

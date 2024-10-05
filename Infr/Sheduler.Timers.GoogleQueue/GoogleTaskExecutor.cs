@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Tasks.V2;
 using Google.Protobuf.WellKnownTypes;
 using Sheduler.Contracts.Contracts;
@@ -12,9 +14,28 @@ public class GoogleTaskExecutor(
     string handler
     ) : IDelayedExecutor
 {
-    private readonly CloudTasksClient _client = CloudTasksClient.Create();
+    private readonly CloudTasksClient _client = CreateClient();
 
 
+    private static CloudTasksClient CreateClient()
+    {
+        try
+        {
+            var json = "/home/fransua/.config/gcloud/application_default_credentials.json";
+            var text = File.ReadAllText(json);
+            
+            var parameters = JsonSerializer.Deserialize(text, AppJsonSerializerContext.Default.JsonCredentialParameters);
+            var builder = new CloudTasksClientBuilder
+            {
+                Credential = GoogleCredential.FromJsonParameters(parameters)
+            };
+            return builder.Build();
+        }
+        catch (Exception e)
+        {
+            return CloudTasksClient.Create();
+        }
+    }
     public async Task<string> Invoke(TimeSpan delay, string timetableId)
     {
         try

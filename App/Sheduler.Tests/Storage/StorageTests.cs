@@ -1,8 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Sheduler.Contracts.Contracts;
 using Sheduler.Contracts.Models;
 using Sheduler.Storage;
-using Sheduler.Storage.Db;
 
 namespace Sheduler.Tests.Storage;
 
@@ -10,20 +9,22 @@ namespace Sheduler.Tests.Storage;
 public class StorageTests
 {
     private const string cs = "Host=localhost;Database=schedules;Username=postgres;Password=password;Port=5432";
-    private readonly IScheduleStorage scheduleStorage = new ScheduleStorage(new ScheduleContext(new DbContextOptions<ScheduleContext>
-    {
-    }));
 
+    private readonly IScheduleStorage _scheduleStorage
+        = new ServiceCollection().AddStorage(cs).BuildServiceProvider().GetService<IScheduleStorage>()!;
+
+    
     [TestMethod]
     public async Task TestMethod1()
     {
+        var all = await _scheduleStorage.GetAll();
         var schedule = new Schedule(
             Guid.NewGuid().ToString(), "Test Schedule", "", [
                 new ScheduledTask("Test task", "*", "Uri", DateTime.UtcNow)
             ]
         );
-        await scheduleStorage.CreateSchedule(schedule);
-        var storedSchedule = await scheduleStorage.Get(schedule.Id);
+        await _scheduleStorage.CreateSchedule(schedule);
+        var storedSchedule = await _scheduleStorage.Get(schedule.Id);
         Assert.IsNotNull(storedSchedule);
         Assert.AreEqual(schedule.Id, storedSchedule.Id);
         Assert.AreEqual(schedule.Name, storedSchedule.Name);
@@ -35,11 +36,15 @@ public class StorageTests
         Assert.AreEqual(scheduledTask.CronExpression, storedTask.CronExpression);
         Assert.AreEqual((scheduledTask.LastInvocation - storedTask.LastInvocation).TotalSeconds, 0, 1);
         var invoke = new TaskInvocation("Test invoacation", DateTime.UtcNow);
-        await scheduleStorage.UpdateNextInvocation(schedule, invoke);
-        var storedInvocation = await scheduleStorage.GetNextInvocation(schedule);
+        await _scheduleStorage.UpdateNextInvocation(schedule, invoke);
+        var storedInvocation = await _scheduleStorage.GetNextInvocation(schedule);
+        var tasks = await _scheduleStorage.GetReadyTasks(schedule.Id);
+        Assert.IsNotNull(tasks);
+        Assert.AreEqual(tasks.Count, 1);
+        await _scheduleStorage.UpdateTaskInvocation(tasks.First());
         Assert.IsNotNull(storedInvocation);
         Assert.AreEqual(invoke.Id, storedInvocation.Id);
         Assert.AreEqual((invoke.Time - storedInvocation.Time).TotalSeconds, 0, 1);
-        await scheduleStorage.Delete(schedule.Id);
+        await _scheduleStorage.Delete(schedule.Id);
     }
 }

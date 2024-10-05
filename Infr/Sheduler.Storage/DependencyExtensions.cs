@@ -15,7 +15,11 @@ public static class DependencyExtensions
         var connectionString = Environment.GetEnvironmentVariable(StorageConnectionString) ??
                                configuration[StorageConnectionString] ??
                                throw new ArgumentException($"{StorageConnectionString} is not provided");
+        return AddStorage(services, connectionString); 
+    }
 
+    public static IServiceCollection AddStorage(this IServiceCollection services, string connectionString)
+    {
         services.AddDbContext<ScheduleContext>(o =>
         {
             o.UseModel(ScheduleContextModel.Instance)
